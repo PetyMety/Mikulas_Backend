@@ -1,26 +1,43 @@
 import { Injectable } from '@nestjs/common';
 import { CreateChildDto } from './dto/create-child.dto';
-import { UpdateChildDto } from './dto/update-child.dto';
+//import { UpdateChildDto } from './dto/update-child.dto';
+import { PrismaService } from 'src/prisma.service';
 
 @Injectable()
 export class ChildService {
+  constructor(private readonly prisma: PrismaService){}
+  
   create(createChildDto: CreateChildDto) {
-    return 'This action adds a new child';
+    return this.prisma.child.create({ data : createChildDto});
   }
 
   findAll() {
-    return `This action returns all child`;
+    return this.prisma.child.findMany();
   }
 
   findOne(id: number) {
-    return `This action returns a #${id} child`;
+    return this.prisma.child.findUnique({where : {id}});
   }
 
-  update(id: number, updateChildDto: UpdateChildDto) {
-    return `This action updates a #${id} child`;
+  async assignGame(childId: number, gameId: number){
+    const child = await this.prisma.child.findUnique({ where : { id : childId}})
+    if (!child) {
+      throw new Error('Child not found');
+    }
+    if (!child.isGood) {
+      throw new Error('Child is not good, cannot assign game');
+    }
+    return this.prisma.game.update({
+      where : { id : gameId},
+      data : { childId : childId}
+    })
+  }
+
+  update(id: number, updateData: Partial<CreateChildDto>) {
+    return this.prisma.child.update({ where : {id}, data : updateData});
   }
 
   remove(id: number) {
-    return `This action removes a #${id} child`;
+    return this.prisma.child.delete({where : {id}});;
   }
 }
