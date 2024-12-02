@@ -27,6 +27,14 @@ export class ChildService {
     if (!child.isGood) {
       throw new Error('Child is not good, cannot assign game');
     }
+
+    /*
+    const existingGame = await this.prisma.game.findUnique({ where : { childId }});
+    if (existingGame) {
+      throw new Error('Child can only have one game assigned')
+    }
+    */
+   
     return this.prisma.game.update({
       where : { id : gameId},
       data : { childId : childId}

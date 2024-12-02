@@ -1,7 +1,8 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, NotFoundException } from '@nestjs/common';
 import { ChildService } from './child.service';
 import { CreateChildDto } from './dto/create-child.dto';
 import { UpdateChildDto } from './dto/update-child.dto';
+
 
 @Controller('child')
 export class ChildController {
@@ -22,13 +23,26 @@ export class ChildController {
     return this.childService.findOne(+id);
   }
 
+  @Post('childId/assign/:gameId')
+  assignGame(@Param('childId') childId: string, @Param('gameId') gameId: string) {
+    return this.childService.assignGame(+childId, +gameId);
+  }
+
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateChildDto: UpdateChildDto) {
-    return this.childService.update(+id, updateChildDto);
+  async update(@Param('id') id: string, @Body() updateChildDto: UpdateChildDto) {
+    const child = await this.childService.update(+id, updateChildDto)
+    if (!child) {
+      throw new NotFoundException('Child not found')
+    }
+    return child;
   }
 
   @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.childService.remove(+id);
+  async remove(@Param('id') id: string) {
+    const child = await this.childService.remove(+id)
+    if (!child) {
+      throw new NotFoundException('Child not found')
+    }
+    return child;
   }
 }
