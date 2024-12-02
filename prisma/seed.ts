@@ -13,7 +13,8 @@ async function main() {
         child: {
           create {
             name : faker.person.fullName(),
-            address : faker.location.streetAddress() + ' ' + faker.location.country()
+            address : faker.location.streetAddress() + ', ' + faker.location.city() + ', ' + faker.location.country(),
+            isGood : faker.datatype.boolean()
           }
         }
       }
