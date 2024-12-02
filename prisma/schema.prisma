@@ -12,3 +12,21 @@ datasource db {
   provider = "mysql"
   url      = env("DATABASE_URL")
 }
+
+model Game {
+  id Int @id @default(autoincrement())
+  name String
+  material String
+  weight Float
+
+  child Child? @relation(fields: [childId], references: [id], onDelete: SetNull)
+  childId Int?
+}
+
+model Child {
+  id Int @id @default(autoincrement())
+  name String
+  address  String
+  isGood Boolean
+  games Game[]
+}
