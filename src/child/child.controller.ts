@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, NotFoundException } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, NotFoundException, ConflictException } from '@nestjs/common';
 import { ChildService } from './child.service';
 import { CreateChildDto } from './dto/create-child.dto';
 import { UpdateChildDto } from './dto/update-child.dto';
@@ -23,8 +23,13 @@ export class ChildController {
     return this.childService.findOne(+id);
   }
 
-  @Post('childId/assign/:gameId')
-  assignGame(@Param('childId') childId: string, @Param('gameId') gameId: string) {
+  // Folyamatban
+  @Post('id/assign/:gameId')
+  async assign(@Param('id') childId: string, @Param('gameId') gameId: string) {
+    const child = await this.childService.findOne(+childId);
+    if (!child || !child.isGood) {
+      throw new ConflictException('Cannot assign game to this child');
+    }
     return this.childService.assignGame(+childId, +gameId);
   }
 

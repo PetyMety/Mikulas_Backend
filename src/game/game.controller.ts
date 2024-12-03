@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, NotFoundException } from '@nestjs/common';
 import { GameService } from './game.service';
 import { CreateGameDto } from './dto/create-game.dto';
 import { UpdateGameDto } from './dto/update-game.dto';
@@ -23,12 +23,20 @@ export class GameController {
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateGameDto: UpdateGameDto) {
-    return this.gameService.update(+id, updateGameDto);
+  async update(@Param('id') id: string, @Body() updateGameDto: CreateGameDto) {
+    const child = await this.gameService.update(+id, updateGameDto);
+    if (!child) {
+      throw new NotFoundException('Game not found');
+    }
+    return child;
   }
 
   @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.gameService.remove(+id);
+  async remove(@Param('id') id: string) {
+    const child = await this.gameService.remove(+id);
+    if (!child) {
+      throw new NotFoundException('Game not found');
+    }
+    return child;
   }
 }
