@@ -25,7 +25,7 @@ export class ChildController {
 
   // Folyamatban
   @Post('id/assign/:gameId')
-  async assign(@Param('id') childId: string, @Param('gameId') gameId: string) {
+  async assignGame(@Param('id') childId: string, @Param('gameId') gameId: string) {
     const child = await this.childService.findOne(+childId);
     if (!child || !child.isGood) {
       throw new ConflictException('Cannot assign game to this child');

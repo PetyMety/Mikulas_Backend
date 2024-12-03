@@ -16,14 +16,26 @@ export class GameService {
   }
 
   findOne(id: number) {
-    return this.prisma.game.findUnique({where : {id}});
+    try {
+      return this.prisma.game.findUnique({where : {id}});
+    } catch {
+      return undefined;
+    }
   }
 
-  update(id: number, updateData: Partial<CreateGameDto>) {
-    return this.prisma.game.update({ where : {id}, data : updateData});
+  async update(id: number, updateData: Partial<CreateGameDto>) {
+    try {
+      return await this.prisma.game.update({ where : {id}, data : updateData});
+    } catch {
+      return undefined;
+    }
   }
 
-  remove(id: number) {
-    return this.prisma.game.delete({where : {id}});;
+  async remove(id: number) {
+    try {
+      return await this.prisma.game.delete({where : {id}});;
+    } catch {
+      return undefined;
+    }
   }
 }

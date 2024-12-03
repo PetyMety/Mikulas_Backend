@@ -7,6 +7,7 @@ import { PrismaService } from 'src/prisma.service';
 export class ChildService {
   constructor(private readonly prisma: PrismaService){}
   
+  // Data-val baja van
   create(createChildDto: CreateChildDto) {
     return this.prisma.child.create({ data : createChildDto});
   }
@@ -19,33 +20,26 @@ export class ChildService {
     return this.prisma.child.findUnique({where : {id}});
   }
 
-  async assignGame(childId: number, gameId: number){
-    const child = await this.prisma.child.findUnique({ where : { id : childId}})
-    if (!child) {
-      throw new Error('Child not found');
-    }
-    if (!child.isGood) {
-      throw new Error('Child is not good, cannot assign game');
-    }
-
-    /*
-    const existingGame = await this.prisma.game.findUnique({ where : { childId }});
-    if (existingGame) {
-      throw new Error('Child can only have one game assigned')
-    }
-    */
-   
-    return this.prisma.game.update({
-      where : { id : gameId},
-      data : { childId : childId}
-    })
+  async assignGame(childId: number, gameId: number) {
+    return this.prisma.child.update({
+      where: { id: childId },
+      data: { gameId },
+    });
   }
 
-  update(id: number, updateData: Partial<CreateChildDto>) {
-    return this.prisma.child.update({ where : {id}, data : updateData});
+  async update(id: number, updateData: Partial<CreateChildDto>) {
+    try {
+      return this.prisma.child.update({ where : {id}, data : updateData});
+    } catch {
+      return undefined;
+    }
   }
 
-  remove(id: number) {
-    return this.prisma.child.delete({where : {id}});;
+  async remove(id: number) {
+    try {
+      return await this.prisma.child.delete({where : {id}});
+    } catch {
+      return undefined;
+    }
   }
 }
