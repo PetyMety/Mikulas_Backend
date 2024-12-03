@@ -19,8 +19,7 @@ model Game {
   material String
   weight Float
 
-  child Child? @relation(fields: [childId], references: [id], onDelete: SetNull)
-  childId Int?
+  child Child[]
 }
 
 model Child {
@@ -28,5 +27,6 @@ model Child {
   name String
   address  String
   isGood Boolean
-  games Game[]
+  games Game @relation(fields: [gameId], references: [id])
+  gameId Int
 }
