@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { CreateGameDto } from './dto/create-game.dto';
-//import { UpdateGameDto } from './dto/update-game.dto';
+import { UpdateGameDto } from './dto/update-game.dto';
 import { PrismaService } from 'src/prisma.service';
 
 @Injectable()
@@ -16,14 +16,10 @@ export class GameService {
   }
 
   findOne(id: number) {
-    try {
-      return this.prisma.game.findUnique({where : {id}});
-    } catch {
-      return undefined;
-    }
+      return this.prisma.game.findUniqueOrThrow({where : {id}});
   }
 
-  async update(id: number, updateData: Partial<CreateGameDto>) {
+  async update(id: number, updateData: UpdateGameDto) {
     try {
       return await this.prisma.game.update({ where : {id}, data : updateData});
     } catch {

@@ -18,12 +18,16 @@ export class GameController {
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.gameService.findOne(+id);
+  async findOne(@Param('id') id: string) {
+    try {
+      return await this.gameService.findOne(+id);
+    } catch {
+       throw new NotFoundException('Game not found');;
+    }
   }
 
   @Patch(':id')
-  async update(@Param('id') id: string, @Body() updateGameDto: CreateGameDto) {
+  async update(@Param('id') id: string, @Body() updateGameDto: UpdateGameDto) {
     const child = await this.gameService.update(+id, updateGameDto);
     if (!child) {
       throw new NotFoundException('Game not found');
@@ -39,4 +43,5 @@ export class GameController {
     }
     return child;
   }
+  
 }

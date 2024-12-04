@@ -1,7 +1,8 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, NotFoundException, ConflictException } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, NotFoundException, ConflictException, Put } from '@nestjs/common';
 import { ChildService } from './child.service';
 import { CreateChildDto } from './dto/create-child.dto';
 import { UpdateChildDto } from './dto/update-child.dto';
+
 
 
 @Controller('child')
@@ -23,8 +24,9 @@ export class ChildController {
     return this.childService.findOne(+id);
   }
 
-  // Folyamatban
-  @Post('id/assign/:gameId')
+  /* Toy remove / add to/from child nem megy
+  // Folyamatban 
+  @Put(':id/assignGame/:gameId')
   async assignGame(@Param('id') childId: string, @Param('gameId') gameId: string) {
     const child = await this.childService.findOne(+childId);
     if (!child || !child.isGood) {
@@ -32,6 +34,18 @@ export class ChildController {
     }
     return this.childService.assignGame(+childId, +gameId);
   }
+
+
+  @Delete(':id/removeGame/:childId')
+  async removeGame(@Param('id') gameId: string, @Param('childId') childId: string){
+    const child = await this.gameService.remove(+gameId);
+    if (!child || !child.gameId) {
+      throw new ConflictException('Cannot remove game from this child');
+    }
+    return this.childService.removeGame(+gameId, +childId);
+  }
+  */
+  
 
   @Patch(':id')
   async update(@Param('id') id: string, @Body() updateChildDto: UpdateChildDto) {

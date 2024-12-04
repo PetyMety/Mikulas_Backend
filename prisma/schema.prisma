@@ -27,6 +27,6 @@ model Child {
   name String
   address  String
   isGood Boolean
-  games Game @relation(fields: [gameId], references: [id])
-  gameId Int
+  games Game? @relation(fields: [gameId], references: [id])
+  gameId Int?
 }

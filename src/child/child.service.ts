@@ -7,7 +7,7 @@ import { PrismaService } from 'src/prisma.service';
 export class ChildService {
   constructor(private readonly prisma: PrismaService){}
   
-  // Data-val baja van
+  // Data-val baja van EDIT: Megjavult
   create(createChildDto: CreateChildDto) {
     return this.prisma.child.create({ data : createChildDto});
   }
@@ -15,7 +15,7 @@ export class ChildService {
   findAll() {
     return this.prisma.child.findMany();
   }
-  
+
 
   findOne(id: number) {
     return this.prisma.child.findUnique({where : {id}});
@@ -27,6 +27,16 @@ export class ChildService {
       data: { gameId },
     });
   }
+
+
+  async removeGame(childId: number, gameId: number) {
+    return this.prisma.child.update({
+      where: { id: childId },
+      data: { gameId },
+    });
+  }
+
+
 
   async update(id: number, updateData: Partial<CreateChildDto>) {
     try {

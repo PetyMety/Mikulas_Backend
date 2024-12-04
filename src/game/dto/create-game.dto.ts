@@ -1,4 +1,4 @@
-import { IsEnum, IsNotEmpty, IsPositive, IsString } from "class-validator";
+import { IsIn, IsNotEmpty, IsPositive, IsString } from "class-validator";
 
 export class CreateGameDto {
 
@@ -7,10 +7,11 @@ export class CreateGameDto {
   name: string;
 
   @IsNotEmpty()
-  @IsEnum(['wood', 'metal', 'plastic', 'other'])
+  @IsIn(['wood', 'metal', 'plastic', 'other'])
   material: string;
 
   @IsPositive()
   weight: number;
 
+  
 }
