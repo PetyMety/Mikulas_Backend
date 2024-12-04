@@ -15,6 +15,7 @@ export class ChildService {
   findAll() {
     return this.prisma.child.findMany();
   }
+  
 
   findOne(id: number) {
     return this.prisma.child.findUnique({where : {id}});
